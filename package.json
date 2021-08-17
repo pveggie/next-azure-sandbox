@@ -5,9 +5,16 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build && next export",
-    "start": "next start"
+    "start": "next start",
+    "stylelint": "npx stylelint \"**/*.css\"",
+    "eslint": "next lint"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-brands-svg-icons": "^5.15.4",
+    "@fortawesome/free-regular-svg-icons": "^5.15.4",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.15",
     "isomorphic-unfetch": "^3.0.0",
     "next": "^11.1.0",
     "react": "^17.0.2",
@@ -15,8 +22,13 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.3.1",
+    "eslint": "7.32.0",
+    "eslint-config-next": "11.1.0",
+    "eslint-config-prettier": "^8.3.0",
     "postcss": "^8.3.6",
+    "prettier": "^2.3.2",
     "serve": "^11.3.2",
+    "stylelint": "^13.13.1",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-property-sort-order-smacss": "^7.1.0",
     "stylelint-config-standard": "^22.0.0",
