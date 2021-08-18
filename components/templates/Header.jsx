@@ -28,7 +28,7 @@ class Header extends React.Component {
           className="sm:hidden"
         />
         <h1 className="text-2xl font-semibold">{siteTitle}</h1>
-        <NavTabs navItems={navItems} className="hidden" />
+        <NavTabs navItems={navItems} className="hidden sm:block" />
       </header>
     )
   }

@@ -1,5 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
+import NavItem from '../molecules/NavItem'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 class NavList extends React.Component {
@@ -17,7 +18,7 @@ class NavList extends React.Component {
 
   render() {
     const navClassName = classNames(
-      `fixed top-${this.props.fromTop} left-0 h-screen w-full bg-gray-900 transform`,
+      `fixed top-${this.props.fromTop} left-0 h-screen w-full bg-gray-900 transform transition-transform motion-reduce:transition-none`,
       {
         '-translate-x-full': !this.state.isOpen,
       }
@@ -25,7 +26,10 @@ class NavList extends React.Component {
 
     return (
       <div className={this.props.className}>
-        <button onClick={this.toggleMenu} className="w-6 mr-4">
+        <button
+          onClick={this.toggleMenu}
+          className="inline-flex items-center w-6 mr-4"
+        >
           <FontAwesomeIcon icon={this.state.isOpen ? 'times' : 'bars'} />
         </button>
 
@@ -33,12 +37,11 @@ class NavList extends React.Component {
           <ul className="list-none ">
             {this.props.navItems.map((navItem) => {
               return (
-                <li
-                  key={navItem}
+                <NavItem
+                  key={navItem.label}
+                  navItem={navItem}
                   className="font-bold mx-6 px-2 py-6 border-b border-gray-300"
-                >
-                  {navItem}
-                </li>
+                />
               )
             })}
           </ul>
