@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import Header from '../organisms/Header'
+import Header from '../templates/Header'
 import { siteTitle } from '../../utils/siteConfig'
 
 export default function DefaultLayout({ children, isHome, pageTitle }) {
