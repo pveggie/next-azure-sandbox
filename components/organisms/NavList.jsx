@@ -18,7 +18,7 @@ class NavList extends React.Component {
 
   render() {
     const navClassName = classNames(
-      `fixed top-${this.props.fromTop} left-0 h-screen w-full bg-gray-900 transform transition-transform motion-reduce:transition-none`,
+      `fixed top-${this.props.fromTop} left-0 h-screen w-full bg-pink-700 transform transition-transform motion-reduce:transition-none`,
       {
         '-translate-x-full': !this.state.isOpen,
       }

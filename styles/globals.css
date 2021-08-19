@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply text-gray-800;
+}
+
+/* base styles inside content blocks */
+.content {
+  @apply mb-10;
+}
+.content div, p, ul {
+  @apply mb-2;
+}
+
+.content li {
+  @apply mb-1;
+}
+
+.content li:last-child {
+  @apply mb-0;
+}
+
+.content *:last-child {
+  @apply mb-0;
+}
+
+.content a {
+  @apply text-pink-600;
+  @apply underline;
+}

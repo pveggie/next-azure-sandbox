@@ -6,5 +6,22 @@
     "source.fixAll": true
   },
   "editor.formatOnSaveMode": "modificationsIfAvailable",
-  "tailwindCSS.emmetCompletions": true
+  "tailwindCSS.emmetCompletions": true,
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#020782",
+    "activityBar.activeBorder": "#bc030a",
+    "activityBar.background": "#020782",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#bc030a",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "statusBar.background": "#010450",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#020782",
+    "titleBar.activeBackground": "#010450",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#01045099",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "#010450"
 }
