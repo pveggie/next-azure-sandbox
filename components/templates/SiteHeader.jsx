@@ -21,18 +21,15 @@ class SiteHeader extends React.Component {
   render() {
     return (
       <header
-        className={`flex md:justify-between items-center h-${this.state.heightFactor} pl-5 bg-gray-800 text-gray-100 shadow-lg`}
+        className={`flex md:justify-between items-center h-${this.state.heightFactor} px-5 bg-gray-800 text-gray-100 shadow-lg`}
       >
         <NavList
           navItems={navItems}
           fromTop={this.state.heightFactor}
           className="md:hidden"
         />
-        <h1 className="text-2xl font-semibold pl-">{siteTitle}</h1>
-        <NavTabs
-          navItems={navItems}
-          className="hidden md:block h-full px-5 bg-gradient-to-r from-gray-800 to-gray-600"
-        />
+        <h1 className="text-2xl font-semibold pr-10">{siteTitle}</h1>
+        <NavTabs navItems={navItems} className="hidden md:block h-full" />
       </header>
     )
   }
