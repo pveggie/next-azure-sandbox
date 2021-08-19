@@ -21,6 +21,11 @@ const technologies = [
     url: 'https://azure.microsoft.com/en-gb/',
     description: 'Cloud Hosting services from Microsoft',
   },
+  {
+    name: 'TypeScript',
+    url: 'https://www.typescriptlang.org/',
+    description: 'JavaScript with types and more error-checking.',
+  },
 ]
 
 export { technologies }

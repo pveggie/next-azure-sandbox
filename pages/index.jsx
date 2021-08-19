@@ -11,7 +11,14 @@ const Home = () => (
       <p>
         This site has been built to try out various technologies. The code is
         hosted on{' '}
-        <a href="https://github.com/pveggie/next-azure-sandbox">GitHub</a>.
+        <a
+          href="https://github.com/pveggie/next-azure-sandbox"
+          target="_blank"
+          rel="noreferrer"
+        >
+          GitHub
+        </a>
+        .
       </p>
 
       <p>
@@ -23,7 +30,7 @@ const Home = () => (
         {technologies.map((technology) => {
           return (
             <li key={technology.name}>
-              <a href={technology.url} target="__blank">
+              <a href={technology.url} target="_blank" rel="noreferrer">
                 <strong>{technology.name}</strong> - {technology.description}
               </a>
             </li>
