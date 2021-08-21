@@ -24,7 +24,8 @@ const technologies = [
   {
     name: 'TypeScript',
     url: 'https://www.typescriptlang.org/',
-    description: 'JavaScript with types and more error-checking.',
+    description:
+      'JavaScript with types, and enhanced tooling and error-checking.',
   },
 ]
 

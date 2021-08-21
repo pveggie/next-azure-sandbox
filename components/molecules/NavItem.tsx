@@ -1,13 +1,19 @@
 import Link from 'next/link'
 
+export interface NavItemInterface {
+  label: string
+  path: string
+}
+
 function NavItem(props: {
   className: string
-  navItem: { path: string; label: string }
-}) {
+  navItem: NavItemInterface
+}): JSX.Element {
+  const { className, navItem } = props
   return (
-    <li className={props.className}>
-      <Link href={props.navItem.path}>
-        <a>{props.navItem.label}</a>
+    <li className={className}>
+      <Link href={navItem.path}>
+        <a>{navItem.label}</a>
       </Link>
     </li>
   )

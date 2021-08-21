@@ -1,7 +1,7 @@
 import DefaultLayout from '../components/layouts/DefaultLayout'
 import { technologies } from '../utils/technologies'
 
-const Home = () => (
+const Home = (): JSX.Element => (
   <DefaultLayout
     isHome
     pageTitle="Welcome"
@@ -27,18 +27,15 @@ const Home = () => (
       </p>
 
       <ul className="list-disc list-inside">
-        {technologies.map((technology) => {
-          return (
-            <li key={technology.name}>
-              <a href={technology.url} target="_blank" rel="noreferrer">
-                <strong>{technology.name}</strong> - {technology.description}
-              </a>
-            </li>
-          )
-        })}
+        {technologies.map((technology) => (
+          <li key={technology.name}>
+            <a href={technology.url} target="_blank" rel="noreferrer">
+              <strong>{technology.name}</strong> - {technology.description}
+            </a>
+          </li>
+        ))}
       </ul>
     </section>
   </DefaultLayout>
 )
-
 export default Home

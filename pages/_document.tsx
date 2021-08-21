@@ -1,10 +1,11 @@
 // https://nextjs.org/docs/advanced-features/custom-document
 import Document, { Html, Head, Main, NextScript } from 'next/document'
+
 class MyDocument extends Document {
-  render() {
+  render(): JSX.Element {
     return (
       <Html lang="en">
-        <Head></Head>
+        <Head />
         <body>
           <Main />
           <NextScript />
