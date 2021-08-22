@@ -5,8 +5,14 @@ import NavTabs from '../organisms/NavTabs'
 
 import { siteTitle, navItems } from '../../utils/siteConfig'
 
-class SiteHeader extends React.Component {
-  constructor(props) {
+type Props = Record<string, unknown>
+
+interface State {
+  heightFactor: number
+}
+
+class SiteHeader extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props)
     this.state = {
       heightFactor: 20,
@@ -18,14 +24,15 @@ class SiteHeader extends React.Component {
   //   this.setState({ headerHeight })
   // }
 
-  render() {
+  render(): JSX.Element {
+    const { heightFactor } = this.state
     return (
       <header
-        className={`flex md:justify-between items-center h-${this.state.heightFactor} px-5 bg-gray-800 text-gray-100 shadow-lg`}
+        className={`flex md:justify-between items-center h-${heightFactor} px-5 bg-gray-800 text-gray-100 shadow-lg`}
       >
         <NavList
           navItems={navItems}
-          fromTop={this.state.heightFactor}
+          fromTop={heightFactor}
           className="md:hidden"
         />
         <h1 className="text-2xl font-semibold pr-10">{siteTitle}</h1>

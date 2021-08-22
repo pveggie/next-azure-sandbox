@@ -1,5 +1,8 @@
+import type { NavItemInterface } from '../components/molecules/NavItem'
+
 const siteTitle = 'Next Sandbox'
-const navItems = [
+
+const navItems: NavItemInterface[] = [
   { path: '/', label: 'Home' },
   { path: '/demos/ocr', label: 'OCR' },
   { path: '/demos/translation', label: 'Translation' },

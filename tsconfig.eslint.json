@@ -1,0 +1,16 @@
+{
+  "include": [
+    ".eslintrc.js",
+    "next.config.js",
+    "postcss.config.js",
+    "prettier.config.js",
+    "stylelint.config.js",
+    "tailwind.config.js"
+  ],
+  "exclude": [
+    "next-env.d.ts"
+  ],
+  "compilerOptions": {
+    "module": "commonjs"
+  }
+}
