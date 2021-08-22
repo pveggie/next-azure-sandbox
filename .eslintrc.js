@@ -1,14 +1,16 @@
 module.exports = {
   extends: [
     'airbnb-typescript',
-    'next/core-web-vitals',
+    'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    'next/core-web-vitals',
     'prettier',
+    'plugin:prettier/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: './tsconfig.json',
+    project: ['./tsconfig.json', './tsconfig.eslint.json'],
   },
   rules: {
     'react/jsx-props-no-spreading': [

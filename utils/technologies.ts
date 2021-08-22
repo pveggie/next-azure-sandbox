@@ -1,4 +1,10 @@
-const technologies = [
+interface TechnologyInterface {
+  name: string
+  url: string
+  description: string
+}
+
+const technologies: TechnologyInterface[] = [
   {
     name: 'React',
     url: 'https://reactjs.org/',
@@ -29,4 +35,5 @@ const technologies = [
   },
 ]
 
+export type { TechnologyInterface }
 export { technologies }

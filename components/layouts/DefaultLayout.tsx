@@ -28,7 +28,7 @@ export default function DefaultLayout({
       <SiteHeader />
 
       <main className="container mx-auto pt-10 px-5 md:pt-20 md:px-10">
-        <PageHeader pageTitle={pageTitle} intro={intro} />
+        {pageTitle && <PageHeader pageTitle={pageTitle} intro={intro} />}
         {children}
       </main>
     </>
