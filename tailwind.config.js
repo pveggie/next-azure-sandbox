@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const tailwindForms = require('@tailwindcss/forms')
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const tailwindAspectRatio = require('@tailwindcss/aspect-ratio')
 
 module.exports = {
   purge: {
@@ -22,5 +24,5 @@ module.exports = {
       padding: ['first', 'last'],
     },
   },
-  plugins: [tailwindForms],
+  plugins: [tailwindForms, tailwindAspectRatio],
 }

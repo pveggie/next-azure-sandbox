@@ -1,13 +1,9 @@
 import React from 'react'
-import 'react-image-crop/dist/ReactCrop.css'
-import type { Crop } from 'react-image-crop'
-import ReactCrop from 'react-image-crop'
-import { createWorker } from 'tesseract.js'
-import DefaultLayout from '../../components/layouts/DefaultLayout'
+import Cropper from 'react-cropper'
+import 'cropperjs/dist/cropper.css'
 
-// const worker = createWorker({
-//   logger: (m) => console.log(m),
-// })
+import { createWorker, Worker } from 'tesseract.js'
+import DefaultLayout from '../../components/layouts/DefaultLayout'
 
 interface Props {
   something?: string
@@ -15,44 +11,42 @@ interface Props {
 
 interface State {
   src: string
-  crop: Crop
+  cropData: string
+  cropper: Cropper | null
 }
 
 class Ocr extends React.Component<Props, State> {
-  worker: unknown
+  worker!: Worker
 
   constructor(props: Props) {
     super(props)
     this.state = {
       src: '/images/image-1.jpg',
-      crop: {
-        x: 50,
-        y: 0,
-        unit: '%',
-        width: 50,
-        height: 25,
-        // aspect: 16 / 9,
-      },
+      cropData: '#',
+      cropper: null,
     }
   }
 
-  // componentDidMount(): void {
-  //   this.worker = createWorker({
-  //     logger: (message) => console.info(message),
-  //   })
-  // }
+  async componentDidMount(): Promise<void> {
+    this.worker = createWorker({
+      logger: (message) => console.info(message),
+    })
 
-  componentWillUnmount(): void {}
+    await this.worker.load()
+    await this.worker.loadLanguage('kor')
+    await this.worker.initialize('kor')
+  }
+
+  async componentWillUnmount(): Promise<void> {
+    await this.worker.terminate()
+  }
 
   onFileSelect(event: React.FormEvent<HTMLInputElement>): void {
     const target = event.target as HTMLInputElement
-    if (
-      target &&
-      'files' in target &&
-      target.files &&
-      'length' in target.files &&
-      target.files.length > 0
-    ) {
+    console.log(Object.keys(target))
+    const files = (target.files as FileList) || []
+
+    if (files.length > 0) {
       const reader = new FileReader()
       reader.addEventListener('load', () => {
         const { result } = reader || ''
@@ -60,50 +54,53 @@ class Ocr extends React.Component<Props, State> {
           this.setState({ src: result })
         }
       })
-      reader.readAsDataURL(target.files[0])
+      reader.readAsDataURL(files[0])
     }
   }
 
-  onCropChange(newCrop: Crop): void {
-    // console.log(newCrop)
-    this.setState({ crop: newCrop })
+  async onCropEnd(): Promise<void> {
+    const { cropper } = this.state
+    if (cropper) {
+      const canvas: HTMLCanvasElement = cropper.getCroppedCanvas()
+      const cropData = canvas.toDataURL()
+      this.setState({ cropData })
+
+      try {
+        const {
+          data: { text },
+        } = await this.worker.recognize(cropData)
+        // eslint-disable-next-line no-console
+        console.log('Text: ', text)
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error)
+      }
+    }
   }
 
   render(): JSX.Element {
-    const { src, crop } = this.state
+    const { src } = this.state
     return (
       <DefaultLayout pageTitle="Optical Character Recognition">
+        {/* TODO: Add custom styling for input */}
         <input
           type="file"
           accept="image/*"
           onChange={(event) => this.onFileSelect(event)}
         />
-        <ReactCrop
-          src={src}
-          crop={crop}
-          onChange={(newCrop) => this.onCropChange(newCrop)}
-        />
+        <div className="aspect-w-16 aspect-h-9 bg-gray-800">
+          <Cropper
+            src={src}
+            responsive
+            onInitialized={(instance) => this.setState({ cropper: instance })}
+            cropend={() => this.onCropEnd()}
+          />
+        </div>
       </DefaultLayout>
     )
   }
 }
 
-// // eslint-disable-next-line no-void
-// void (async () => {
-//   try {
-//     await worker.load()
-//     await worker.loadLanguage('kor')
-//     await worker.initialize('kor')
-//     const {
-//       data: { text },
-//     } = await worker.recognize('/images/image-1.jpg')
-//     // eslint-disable-next-line no-console
-//     console.log('Text: ', text)
-//     await worker.terminate()
-//   } catch (error) {
-//     // eslint-disable-next-line no-console
-//     console.error(error)
-//   }
-// })()
+// eslint-disable-next-line no-void
 
 export default Ocr
