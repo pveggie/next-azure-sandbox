@@ -43,9 +43,8 @@ class Ocr extends React.Component<Props, State> {
     await this.worker.terminate()
   }
 
-  onFileSelect(event: React.FormEvent<HTMLInputElement>): void {
+  handleFileSelect(event: React.FormEvent<HTMLInputElement>): void {
     const target = event.target as HTMLInputElement
-    console.log(Object.keys(target))
     const files = (target.files as FileList) || []
 
     if (files.length > 0) {
@@ -77,7 +76,6 @@ class Ocr extends React.Component<Props, State> {
       } = await this.worker.recognize(cropData)
       this.setState({ text })
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error(error)
     }
   }
@@ -110,12 +108,13 @@ class Ocr extends React.Component<Props, State> {
             to allow for text to be read from specific parts of an image.
           </p>
         </section>
-        {/* TODO: Add custom styling for input */}
+
         <section>
+          {/* TODO: Add custom styling for input */}
           <input
             type="file"
             accept="image/*"
-            onChange={(event) => this.onFileSelect(event)}
+            onChange={(event) => this.handleFileSelect(event)}
           />
           <button type="button" onClick={() => this.handleGetTextClick()}>
             Get Text
