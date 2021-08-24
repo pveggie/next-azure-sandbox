@@ -1,7 +1,8 @@
 import React from 'react'
 import Cropper from 'react-cropper'
 import 'cropperjs/dist/cropper.css'
-
+import classNames from 'classnames'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { createWorker, Worker } from 'tesseract.js'
 import DefaultLayout from '../../components/layouts/DefaultLayout'
 
@@ -14,6 +15,8 @@ interface State {
   cropData: string
   cropper: Cropper | null
   text: string
+  hasRead: boolean
+  isReading: boolean
 }
 
 class Ocr extends React.Component<Props, State> {
@@ -23,9 +26,11 @@ class Ocr extends React.Component<Props, State> {
     super(props)
     this.state = {
       src: '/images/image-1.jpg',
-      cropData: '#',
+      cropData: '',
       cropper: null,
       text: 'Set image area then hit the "Get text" button.',
+      hasRead: false,
+      isReading: false,
     }
   }
 
@@ -56,10 +61,33 @@ class Ocr extends React.Component<Props, State> {
         }
       })
       reader.readAsDataURL(files[0])
+      this.setCropData()
     }
   }
 
+  handleCropInit(instance: Cropper): void {
+    this.setState({ cropper: instance })
+    this.setCropData()
+  }
+
   handleCropEnd(): void {
+    this.setCropData()
+  }
+
+  async handleGetTextClick(): Promise<void> {
+    const { cropData } = this.state
+    this.setState({ isReading: true })
+    try {
+      const {
+        data: { text },
+      } = await this.worker.recognize(cropData)
+      this.setState({ text, isReading: false })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  setCropData(): void {
     const { cropper } = this.state
     if (cropper) {
       const canvas: HTMLCanvasElement = cropper.getCroppedCanvas()
@@ -68,20 +96,8 @@ class Ocr extends React.Component<Props, State> {
     }
   }
 
-  async handleGetTextClick(): Promise<void> {
-    const { cropData } = this.state
-    try {
-      const {
-        data: { text },
-      } = await this.worker.recognize(cropData)
-      this.setState({ text })
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
   render(): JSX.Element {
-    const { src, text } = this.state
+    const { src, text, cropData, hasRead, isReading } = this.state
     return (
       <DefaultLayout
         pageTitle="Optical Character Recognition"
@@ -114,26 +130,51 @@ class Ocr extends React.Component<Props, State> {
           <input
             type="file"
             accept="image/*"
+            className="mb-2"
             onChange={(event) => this.handleFileSelect(event)}
           />
-          <button type="button" onClick={() => this.handleGetTextClick()}>
-            Get Text
-          </button>
+          {cropData && (
+            <button
+              className="p-2 mb-2 bg-pink-600 text-white"
+              type="button"
+              onClick={() => this.handleGetTextClick()}
+            >
+              {isReading && (
+                <FontAwesomeIcon
+                  icon="spinner"
+                  className="animate-spin h-5 w-5 mr-2"
+                />
+              )}
+              Get Text
+            </button>
+          )}
+
           <div className="">
-            <div className="aspect-w-16 aspect-h-9 bg-gray-800 mb-4">
+            <div className="aspect-w-16 aspect-h-9 bg-gray-800 mb-4 relative">
+              {isReading && (
+                <div className="absolute inset-0 flex justify-center items-center bg-gray-400 bg-transparent z-10">
+                  <FontAwesomeIcon
+                    icon="spinner"
+                    className="animate-spin h-5 w-5 mr-2"
+                  />
+                  Reading text
+                </div>
+              )}
               <Cropper
                 src={src}
                 responsive
-                onInitialized={(instance) =>
-                  this.setState({ cropper: instance })
-                }
+                dragMode="move"
+                autoCropArea={0.5}
+                onInitialized={(instance) => this.handleCropInit(instance)}
                 cropend={() => this.handleCropEnd()}
               />
             </div>
             <div className="content">
               <h3 className="font-bold">Result</h3>
               <div className="p-4 border-2">
-                <p>{text}</p>
+                <p className={classNames({ 'text-gray-400': !hasRead })}>
+                  {text}
+                </p>
               </div>
             </div>
           </div>

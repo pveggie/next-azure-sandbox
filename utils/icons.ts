@@ -2,9 +2,9 @@
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 // Free solid
-import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons'
 // Free brand
 
 // Free regular
 
-library.add(faBars, faTimes)
+library.add(faBars, faSpinner, faTimes)
