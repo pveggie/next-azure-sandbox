@@ -14,7 +14,7 @@ body {
   @apply mb-2;
 }
 
-.content li {
+.content h3, li {
   @apply mb-1;
 }
 

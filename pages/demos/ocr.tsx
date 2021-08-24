@@ -13,6 +13,7 @@ interface State {
   src: string
   cropData: string
   cropper: Cropper | null
+  text: string
 }
 
 class Ocr extends React.Component<Props, State> {
@@ -24,6 +25,7 @@ class Ocr extends React.Component<Props, State> {
       src: '/images/image-1.jpg',
       cropData: '#',
       cropper: null,
+      text: 'Set image area then hit the "Get text" button.',
     }
   }
 
@@ -58,44 +60,85 @@ class Ocr extends React.Component<Props, State> {
     }
   }
 
-  async onCropEnd(): Promise<void> {
+  handleCropEnd(): void {
     const { cropper } = this.state
     if (cropper) {
       const canvas: HTMLCanvasElement = cropper.getCroppedCanvas()
       const cropData = canvas.toDataURL()
       this.setState({ cropData })
+    }
+  }
 
-      try {
-        const {
-          data: { text },
-        } = await this.worker.recognize(cropData)
-        // eslint-disable-next-line no-console
-        console.log('Text: ', text)
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error)
-      }
+  async handleGetTextClick(): Promise<void> {
+    const { cropData } = this.state
+    try {
+      const {
+        data: { text },
+      } = await this.worker.recognize(cropData)
+      this.setState({ text })
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error)
     }
   }
 
   render(): JSX.Element {
-    const { src } = this.state
+    const { src, text } = this.state
     return (
-      <DefaultLayout pageTitle="Optical Character Recognition">
+      <DefaultLayout
+        pageTitle="Optical Character Recognition"
+        intro="Reading text from an image using Tesseract.js"
+      >
+        <section className="content">
+          <p>
+            This page uses a the{' '}
+            <a
+              href="https://github.com/fengyuanchen/cropperjs"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Cropper library{' '}
+            </a>
+            and{' '}
+            <a
+              href="https://github.com/naptha/tesseract.js#tesseractjs"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Tesseract.js
+            </a>{' '}
+            to allow for text to be read from specific parts of an image.
+          </p>
+        </section>
         {/* TODO: Add custom styling for input */}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(event) => this.onFileSelect(event)}
-        />
-        <div className="aspect-w-16 aspect-h-9 bg-gray-800">
-          <Cropper
-            src={src}
-            responsive
-            onInitialized={(instance) => this.setState({ cropper: instance })}
-            cropend={() => this.onCropEnd()}
+        <section>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(event) => this.onFileSelect(event)}
           />
-        </div>
+          <button type="button" onClick={() => this.handleGetTextClick()}>
+            Get Text
+          </button>
+          <div className="">
+            <div className="aspect-w-16 aspect-h-9 bg-gray-800 mb-4">
+              <Cropper
+                src={src}
+                responsive
+                onInitialized={(instance) =>
+                  this.setState({ cropper: instance })
+                }
+                cropend={() => this.handleCropEnd()}
+              />
+            </div>
+            <div className="content">
+              <h3 className="font-bold">Result</h3>
+              <div className="p-4 border-2">
+                <p>{text}</p>
+              </div>
+            </div>
+          </div>
+        </section>
       </DefaultLayout>
     )
   }
