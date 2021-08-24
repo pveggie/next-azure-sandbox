@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const tailwindForms = require('@tailwindcss/forms')
+
 module.exports = {
   purge: {
     content: [
@@ -18,5 +22,5 @@ module.exports = {
       padding: ['first', 'last'],
     },
   },
-  plugins: [],
+  plugins: [tailwindForms],
 }

@@ -14,7 +14,7 @@ interface Props {
 }
 
 interface State {
-  // image: null
+  src: string
   crop: Crop
 }
 
@@ -24,7 +24,7 @@ class Ocr extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      // image: null,
+      src: '/images/image-1.jpg',
       crop: {
         x: 50,
         y: 0,
@@ -44,17 +44,42 @@ class Ocr extends React.Component<Props, State> {
 
   componentWillUnmount(): void {}
 
+  onFileSelect(event: React.FormEvent<HTMLInputElement>): void {
+    const target = event.target as HTMLInputElement
+    if (
+      target &&
+      'files' in target &&
+      target.files &&
+      'length' in target.files &&
+      target.files.length > 0
+    ) {
+      const reader = new FileReader()
+      reader.addEventListener('load', () => {
+        const { result } = reader || ''
+        if (typeof result === 'string') {
+          this.setState({ src: result })
+        }
+      })
+      reader.readAsDataURL(target.files[0])
+    }
+  }
+
   onCropChange(newCrop: Crop): void {
     // console.log(newCrop)
     this.setState({ crop: newCrop })
   }
 
   render(): JSX.Element {
-    const { crop } = this.state
+    const { src, crop } = this.state
     return (
       <DefaultLayout pageTitle="Optical Character Recognition">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(event) => this.onFileSelect(event)}
+        />
         <ReactCrop
-          src="/images/image-1.jpg"
+          src={src}
           crop={crop}
           onChange={(newCrop) => this.onCropChange(newCrop)}
         />
