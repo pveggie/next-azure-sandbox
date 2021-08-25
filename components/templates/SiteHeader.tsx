@@ -19,24 +19,19 @@ class SiteHeader extends React.Component<Props, State> {
     }
   }
 
-  // componentDidMount() {
-  //   const headerHeight = this.divElement.clientHeight
-  //   this.setState({ headerHeight })
-  // }
-
   render(): JSX.Element {
     const { heightFactor } = this.state
     return (
       <header
-        className={`flex md:justify-between items-center h-${heightFactor} px-5 bg-gray-800 text-gray-100 shadow-lg`}
+        className={`sticky inset-0 flex md:justify-between items-center h-${heightFactor} px-5 bg-gray-800 text-gray-100 shadow-lg z-50`}
       >
         <NavList
           navItems={navItems}
           fromTop={heightFactor}
           className="md:hidden"
         />
-        <h1 className="text-2xl font-semibold pr-10">{siteTitle}</h1>
-        <NavTabs navItems={navItems} className="hidden md:block h-full" />
+        <h1 className="pr-10 text-2xl font-semibold">{siteTitle}</h1>
+        <NavTabs navItems={navItems} className="hidden h-full md:block" />
       </header>
     )
   }

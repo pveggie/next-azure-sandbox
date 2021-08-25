@@ -1,3 +1,6 @@
+const tailwindForms = require('@tailwindcss/forms')
+const tailwindAspectRatio = require('@tailwindcss/aspect-ratio')
+
 module.exports = {
   purge: {
     content: [
@@ -10,7 +13,11 @@ module.exports = {
 
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      zIndex: {
+        '-1': '-1',
+      },
+    },
   },
   variants: {
     extend: {
@@ -18,5 +25,5 @@ module.exports = {
       padding: ['first', 'last'],
     },
   },
-  plugins: [],
+  plugins: [tailwindForms, tailwindAspectRatio],
 }

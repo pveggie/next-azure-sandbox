@@ -10,8 +10,8 @@ function PageHeader(props: Props): JSX.Element {
 
   return (
     <div className={`${className} mb-6`}>
-      <h1 className="mb-8 text-4xl text-gray-800 font-black">{pageTitle}</h1>
-      {intro && <p className="mb-0 text-2xl text-gray-500">{intro}</p>}
+      <h1 className="mb-8 text-gray-800 text-4xl font-black">{pageTitle}</h1>
+      {intro && <p className="mb-0 text-gray-500 text-2xl">{intro}</p>}
     </div>
   )
 }
