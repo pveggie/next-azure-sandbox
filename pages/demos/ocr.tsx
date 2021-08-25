@@ -13,7 +13,6 @@ interface Props {
 
 interface State {
   src: string
-  cropData: string
   cropper: Cropper | null
   text: string
   hasRead: boolean
@@ -27,7 +26,6 @@ class Ocr extends React.Component<Props, State> {
     super(props)
     this.state = {
       src: '/images/image-1.jpg',
-      cropData: '',
       cropper: null,
       text: 'Set image area then hit the "Get text" button.',
       hasRead: false,
@@ -36,13 +34,11 @@ class Ocr extends React.Component<Props, State> {
   }
 
   async componentDidMount(): Promise<void> {
-    this.worker = createWorker({
-      logger: (message) => console.info(message),
-    })
+    this.worker = createWorker()
 
     await this.worker.load()
-    await this.worker.loadLanguage('kor')
-    await this.worker.initialize('kor')
+    await this.worker.loadLanguage('kor+eng')
+    await this.worker.initialize('kor+eng')
   }
 
   async componentWillUnmount(): Promise<void> {
@@ -62,43 +58,39 @@ class Ocr extends React.Component<Props, State> {
         }
       })
       reader.readAsDataURL(files[0])
-      this.setCropData()
     }
   }
 
   handleCropInit(instance: Cropper): void {
     this.setState({ cropper: instance })
-    this.setCropData()
-  }
-
-  handleCropEnd(): void {
-    this.setCropData()
   }
 
   async handleGetTextClick(): Promise<void> {
-    const { cropData } = this.state
     this.setState({ isReading: true })
-    try {
+    const cropData = this.getCropData()
+
+    if (cropData) {
       const {
         data: { text },
       } = await this.worker.recognize(cropData)
       this.setState({ text, isReading: false })
-    } catch (error) {
-      console.error(error)
+    } else {
+      this.setState({ text: 'Text could not be read', isReading: false })
     }
   }
 
-  setCropData(): void {
+  getCropData(): string {
     const { cropper } = this.state
+    let cropData = ''
     if (cropper) {
       const canvas: HTMLCanvasElement = cropper.getCroppedCanvas()
-      const cropData = canvas.toDataURL()
-      this.setState({ cropData })
+      cropData = canvas.toDataURL()
     }
+    return cropData
   }
 
   render(): JSX.Element {
-    const { src, text, cropData, hasRead, isReading } = this.state
+    const { src, text, hasRead, isReading } = this.state
     return (
       <DefaultLayout
         pageTitle="Optical Character Recognition"
@@ -127,46 +119,41 @@ class Ocr extends React.Component<Props, State> {
         </section>
 
         <section>
-          {/* TODO: Add custom styling for input */}
-
-          <div className="grid gap-x-8 gap-y-4 md:grid-cols-4">
+          <div className="grid gap-x-8 gap-y-4 md:grid-cols-3 lg:grid-cols-4">
             <div className="md:col-span-1">
-              <div className="grid gap-4 grid-cols-2">
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="mb-2"
-                  onChange={(event) => this.handleFileSelect(event)}
-                />
-                {cropData && (
-                  <Button
-                    className="mb-2"
-                    primary
-                    onClick={() => this.handleGetTextClick()}
-                  >
+              <h3 className="mb-1 font-bold">Image Area Selection</h3>
+              <div className="p-4 border-2">
+                <div className="grid gap-x-4 gap-y-2 mb-2">
+                  {/* TODO: Add custom styling for file input */}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(event) => this.handleFileSelect(event)}
+                  />
+
+                  <Button primary onClick={() => this.handleGetTextClick()}>
                     <Loader isLoading={isReading} iconClassName="mr-2" />
                     Get Text
                   </Button>
-                )}
-              </div>
+                </div>
 
-              <div className="aspect-w-1 aspect-h-1 relative bg-gray-800">
-                <Loader isMask isLoading={isReading} iconClassName="mr-3">
-                  Reading text
-                </Loader>
+                <div className="aspect-w-1 aspect-h-1 relative bg-gray-800 overflow-hidden">
+                  <Loader isMask isLoading={isReading} iconClassName="mr-3">
+                    Reading text
+                  </Loader>
 
-                <Cropper
-                  src={src}
-                  responsive
-                  dragMode="move"
-                  autoCropArea={0.5}
-                  onInitialized={(instance) => this.handleCropInit(instance)}
-                  cropend={() => this.handleCropEnd()}
-                />
+                  <Cropper
+                    src={src}
+                    responsive
+                    dragMode="move"
+                    autoCropArea={0.5}
+                    onInitialized={(instance) => this.handleCropInit(instance)}
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="content md:col-span-3">
+            <div className="content lg-col-span-3 md:col-span-2">
               <h3 className="font-bold">Result</h3>
               <div className="p-4 border-2">
                 <p className={classNames({ 'text-gray-400': !hasRead })}>
