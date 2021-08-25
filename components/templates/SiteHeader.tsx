@@ -23,7 +23,7 @@ class SiteHeader extends React.Component<Props, State> {
     const { heightFactor } = this.state
     return (
       <header
-        className={`sticky inset-0 flex md:justify-between items-center h-${heightFactor} px-5 bg-gray-800 text-gray-100 shadow-lg`}
+        className={`sticky inset-0 flex md:justify-between items-center h-${heightFactor} px-5 bg-gray-800 text-gray-100 shadow-lg z-50`}
       >
         <NavList
           navItems={navItems}

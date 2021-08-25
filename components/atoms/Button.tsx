@@ -27,7 +27,7 @@ function Button({
 }: PropsWithChildren<ButtonProps>): JSX.Element {
   const buttonClasses = classNames(
     className,
-    'flex items-center px-3 py-2 font-bold',
+    'flex items-center justify-center px-3 py-2 font-bold',
     {
       'bg-pink-600 text-white': primary,
       'bg-gray-600 text-white': secondary,

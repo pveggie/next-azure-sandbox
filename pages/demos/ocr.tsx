@@ -128,39 +128,45 @@ class Ocr extends React.Component<Props, State> {
 
         <section>
           {/* TODO: Add custom styling for input */}
-          <input
-            type="file"
-            accept="image/*"
-            className="mb-2"
-            onChange={(event) => this.handleFileSelect(event)}
-          />
-          {cropData && (
-            <Button
-              className="mb-2"
-              primary
-              onClick={() => this.handleGetTextClick()}
-            >
-              <Loader isLoading={isReading} />
-              <span className="ml-2">Get Text</span>
-            </Button>
-          )}
 
-          <div className="">
-            <div className="aspect-w-16 aspect-h-9 relative mb-4 bg-gray-800">
-              <Loader isMask isLoading={isReading}>
-                <span className="ml-3">Reading text</span>
-              </Loader>
+          <div className="grid gap-x-8 gap-y-4 md:grid-cols-4">
+            <div className="md:col-span-1">
+              <div className="grid gap-4 grid-cols-2">
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="mb-2"
+                  onChange={(event) => this.handleFileSelect(event)}
+                />
+                {cropData && (
+                  <Button
+                    className="mb-2"
+                    primary
+                    onClick={() => this.handleGetTextClick()}
+                  >
+                    <Loader isLoading={isReading} iconClassName="mr-2" />
+                    Get Text
+                  </Button>
+                )}
+              </div>
 
-              <Cropper
-                src={src}
-                responsive
-                dragMode="move"
-                autoCropArea={0.5}
-                onInitialized={(instance) => this.handleCropInit(instance)}
-                cropend={() => this.handleCropEnd()}
-              />
+              <div className="aspect-w-1 aspect-h-1 relative bg-gray-800">
+                <Loader isMask isLoading={isReading} iconClassName="mr-3">
+                  Reading text
+                </Loader>
+
+                <Cropper
+                  src={src}
+                  responsive
+                  dragMode="move"
+                  autoCropArea={0.5}
+                  onInitialized={(instance) => this.handleCropInit(instance)}
+                  cropend={() => this.handleCropEnd()}
+                />
+              </div>
             </div>
-            <div className="content">
+
+            <div className="content md:col-span-3">
               <h3 className="font-bold">Result</h3>
               <div className="p-4 border-2">
                 <p className={classNames({ 'text-gray-400': !hasRead })}>

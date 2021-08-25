@@ -5,15 +5,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 interface Props {
   isLoading: boolean
   isMask?: boolean
+  iconClassName?: string
 }
 
 function Loader({
   children,
+  iconClassName,
   isLoading,
   isMask,
 }: PropsWithChildren<Props>): JSX.Element {
   const loaderIcon = (
-    <FontAwesomeIcon icon="spinner" className="w-5 h-5 animate-spin" />
+    <FontAwesomeIcon
+      icon="spinner"
+      className={classNames('w-5 h-5 animate-spin', iconClassName)}
+    />
   )
 
   const loaderBox = (
