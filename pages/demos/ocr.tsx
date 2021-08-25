@@ -168,6 +168,4 @@ class Ocr extends React.Component<Props, State> {
   }
 }
 
-// eslint-disable-next-line no-void
-
 export default Ocr
