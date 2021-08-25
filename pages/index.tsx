@@ -26,7 +26,7 @@ const Home = (): JSX.Element => (
         official sites.
       </p>
 
-      <ul className="list-disc list-inside">
+      <ul className="list-inside list-disc">
         {technologies.map((technology) => (
           <li key={technology.name}>
             <a href={technology.url} target="_blank" rel="noreferrer">

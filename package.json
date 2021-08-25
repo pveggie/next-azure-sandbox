@@ -42,6 +42,7 @@
     "eslint-plugin-prettier": "^3.4.1",
     "postcss": "^8.3.6",
     "prettier": "^2.3.2",
+    "prettier-plugin-tailwind": "^2.2.12",
     "serve": "^11.3.2",
     "stylelint": "^13.13.1",
     "stylelint-config-prettier": "^8.0.2",

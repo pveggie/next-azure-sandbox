@@ -9,12 +9,12 @@ function NavTabs(props: Props): JSX.Element {
   const { className, navItems } = props
   return (
     <nav className={className}>
-      <ul className="list-none h-full inline-flex items-center">
+      <ul className="inline-flex items-center h-full list-none">
         {navItems.map((navItem) => (
           <NavItem
             key={navItem.label}
             navItem={navItem}
-            className="font-semibold px-4 border-r-2 first:pl-0 last:pr-0 last:border-r-0"
+            className="first:pl-0 last:pr-0 px-4 font-semibold last:border-r-0 border-r-2"
           />
         ))}
       </ul>

@@ -146,7 +146,7 @@ class Ocr extends React.Component<Props, State> {
           )}
 
           <div className="">
-            <div className="aspect-w-16 aspect-h-9 bg-gray-800 mb-4 relative">
+            <div className="aspect-w-16 aspect-h-9 relative mb-4 bg-gray-800">
               <Loader isMask isLoading={isReading}>
                 <span className="ml-3">Reading text</span>
               </Loader>

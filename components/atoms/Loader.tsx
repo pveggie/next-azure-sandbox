@@ -13,7 +13,7 @@ function Loader({
   isMask,
 }: PropsWithChildren<Props>): JSX.Element {
   const loaderIcon = (
-    <FontAwesomeIcon icon="spinner" className="animate-spin h-5 w-5" />
+    <FontAwesomeIcon icon="spinner" className="w-5 h-5 animate-spin" />
   )
 
   const loaderBox = (

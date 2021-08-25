@@ -30,8 +30,8 @@ class SiteHeader extends React.Component<Props, State> {
           fromTop={heightFactor}
           className="md:hidden"
         />
-        <h1 className="text-2xl font-semibold pr-10">{siteTitle}</h1>
-        <NavTabs navItems={navItems} className="hidden md:block h-full" />
+        <h1 className="pr-10 text-2xl font-semibold">{siteTitle}</h1>
+        <NavTabs navItems={navItems} className="hidden h-full md:block" />
       </header>
     )
   }

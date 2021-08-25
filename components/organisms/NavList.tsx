@@ -42,18 +42,18 @@ class NavList extends React.Component<Props, State> {
         <button
           type="button"
           onClick={() => this.toggleMenu()}
-          className="inline-flex items-center w-6 mr-4"
+          className="inline-flex items-center mr-4 w-6"
         >
           <FontAwesomeIcon icon={isOpen ? 'times' : 'bars'} />
         </button>
 
         <nav className={navClassName}>
-          <ul className="list-none ">
+          <ul className="list-none">
             {navItems.map((navItem) => (
               <NavItem
                 key={navItem.label}
                 navItem={navItem}
-                className="font-bold mx-6 px-2 py-6 border-b border-gray-300"
+                className="mx-6 px-2 py-6 font-bold border-b border-gray-300"
               />
             ))}
           </ul>
