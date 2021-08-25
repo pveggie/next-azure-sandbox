@@ -2,9 +2,10 @@ import React from 'react'
 import Cropper from 'react-cropper'
 import 'cropperjs/dist/cropper.css'
 import classNames from 'classnames'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { createWorker, Worker } from 'tesseract.js'
 import DefaultLayout from '../../components/layouts/DefaultLayout'
+import Button from '../../components/atoms/Button'
+import Loader from '../../components/atoms/Loader'
 
 interface Props {
   something?: string
@@ -134,32 +135,22 @@ class Ocr extends React.Component<Props, State> {
             onChange={(event) => this.handleFileSelect(event)}
           />
           {cropData && (
-            <button
-              className="p-2 mb-2 bg-pink-600 text-white"
-              type="button"
+            <Button
+              className="mb-2"
+              primary
               onClick={() => this.handleGetTextClick()}
             >
-              {isReading && (
-                <FontAwesomeIcon
-                  icon="spinner"
-                  className="animate-spin h-5 w-5 mr-2"
-                />
-              )}
-              Get Text
-            </button>
+              <Loader isLoading={isReading} />
+              <span className="ml-2">Get Text</span>
+            </Button>
           )}
 
           <div className="">
             <div className="aspect-w-16 aspect-h-9 bg-gray-800 mb-4 relative">
-              {isReading && (
-                <div className="absolute inset-0 flex justify-center items-center bg-gray-400 bg-transparent z-10">
-                  <FontAwesomeIcon
-                    icon="spinner"
-                    className="animate-spin h-5 w-5 mr-2"
-                  />
-                  Reading text
-                </div>
-              )}
+              <Loader isMask isLoading={isReading}>
+                <span className="ml-3">Reading text</span>
+              </Loader>
+
               <Cropper
                 src={src}
                 responsive
