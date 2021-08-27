@@ -23,5 +23,8 @@
     "titleBar.inactiveBackground": "#01045099",
     "titleBar.inactiveForeground": "#e7e7e799"
   },
-  "peacock.color": "#010450"
+  "peacock.color": "#010450",
+  "cSpell.ignoreWords": [
+    "uuidv"
+  ]
 }

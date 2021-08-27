@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import DefaultLayout from '../../components/layouts/DefaultLayout'
+import type { TranslationResponse } from '../api/translation'
 
 interface Props {
   something?: string
@@ -8,6 +9,7 @@ interface Props {
 interface State {
   sourceText: string
   translatedText: string
+  error: string
 }
 class Translation extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -15,35 +17,42 @@ class Translation extends React.Component<Props, State> {
     this.state = {
       sourceText: '도 토 리 전 분',
       translatedText: '',
+      error: '',
     }
   }
 
-  componentDidMount(): void {
+  async componentDidMount(): Promise<void> {
     const { sourceText } = this.state
-    axios
-      .get('/api/translate', { params: { sourceText } })
-      .then((response) => {
-        // handle success
-        if ('data' in response) {
-          const translatedText = response.data as string
-          this.setState({ translatedText })
+
+    try {
+      const response = await axios.get<TranslationResponse>(
+        '/api/translation',
+        {
+          params: { sourceText },
         }
-      })
-      .catch((error) => {
-        // handle error
-        const errorText = error as string
-        this.setState({ translatedText: errorText })
-      })
+      )
+      const translatedText = response.data.translation
+      this.setState({ translatedText })
+    } catch (error) {
+      let errMessage = 'An error occurred'
+      if ('statusCode' in error) {
+        const respError = error as AxiosError
+        errMessage = respError.message
+      }
+
+      this.setState({ error: errMessage })
+    }
   }
 
   render(): ReactNode {
-    const { sourceText, translatedText } = this.state
+    const { sourceText, translatedText, error } = this.state
     return (
       <DefaultLayout pageTitle="Translation">
         <input type="text" readOnly value={sourceText} />
 
         <div className="p-4">
           <h3 className="mb-2 font-bold">Result</h3>
+          {error && <p className="text-red-600">{error}</p>}
           <p>{translatedText}</p>
         </div>
       </DefaultLayout>
