@@ -12,10 +12,10 @@ export type TranslationRequestParams = {
   sourceText: string
 }
 
-export default async function handler(
+export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<{ translation: string }>
-): Promise<void> {
+): void {
   const languageCodes = {
     english: 'en',
     korean: 'ko',
@@ -26,34 +26,34 @@ export default async function handler(
     sourceText: string
   }
 
-  function getAxiosParams({
-    apiKey,
-    sourceText,
-  }: GetParamsArgs): AxiosRequestConfig {
-    return {
-      baseURL: 'https://api.cognitive.microsofttranslator.com',
-      url: '/translate',
-      method: 'post',
-      headers: {
-        'Ocp-Apim-Subscription-Key': apiKey,
-        'Ocp-Apim-Subscription-Region': 'germanywestcentral',
-        'Content-Type': 'application/json',
-        'X-ClientTraceId': uuid().toString(),
-      },
-      params: {
-        'api-version': '3.0',
-        from: languageCodes.korean,
-        fromScript: languageCodes.korean,
-        to: languageCodes.english,
-        toScript: languageCodes.english,
-      },
-      data: [
-        {
-          text: sourceText,
-        },
-      ],
-    }
-  }
+  // function getAxiosParams({
+  //   apiKey,
+  //   sourceText,
+  // }: GetParamsArgs): AxiosRequestConfig {
+  //   return {
+  //     baseURL: 'https://api.cognitive.microsofttranslator.com',
+  //     url: '/translate',
+  //     method: 'post',
+  //     headers: {
+  //       'Ocp-Apim-Subscription-Key': apiKey,
+  //       'Ocp-Apim-Subscription-Region': 'germanywestcentral',
+  //       'Content-Type': 'application/json',
+  //       'X-ClientTraceId': uuid().toString(),
+  //     },
+  //     params: {
+  //       'api-version': '3.0',
+  //       from: languageCodes.korean,
+  //       fromScript: languageCodes.korean,
+  //       to: languageCodes.english,
+  //       toScript: languageCodes.english,
+  //     },
+  //     data: [
+  //       {
+  //         text: sourceText,
+  //       },
+  //     ],
+  //   }
+  // }
 
   try {
     if (!process.env.TRANSLATION_API_KEY) {
@@ -63,16 +63,16 @@ export default async function handler(
       )
       throw new Error()
     }
-    const queryParams = req.query as TranslationRequestParams
-    const { sourceText } = queryParams
-    const translationApiKey = process.env.TRANSLATION_API_KEY
-    const axiosParams = getAxiosParams({
-      apiKey: translationApiKey,
-      sourceText,
-    })
-    const azureRes = await axios(axiosParams)
-    console.log('SUCCESS')
-    console.log(azureRes)
+    // const queryParams = req.query as TranslationRequestParams
+    // const { sourceText } = queryParams
+    // const translationApiKey = process.env.TRANSLATION_API_KEY
+    // const axiosParams = getAxiosParams({
+    //   apiKey: translationApiKey,
+    //   sourceText,
+    // })
+    // const azureRes = await axios(axiosParams)
+    // console.log('SUCCESS')
+    // console.log(azureRes)
     res.status(200).json({ translation: 'Test sending response from api' })
   } catch (error) {
     console.log('ERROR')
