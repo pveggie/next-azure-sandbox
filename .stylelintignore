@@ -1,5 +1,5 @@
-!app
-!app/components
-!app/pages
-!app/styles
-!app/utils
+/*
+!/components
+!/pages
+!/styles
+!/utils
