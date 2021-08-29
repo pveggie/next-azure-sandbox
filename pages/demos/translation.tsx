@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react'
 import axios, { AxiosError } from 'axios'
 import DefaultLayout from '../../components/layouts/DefaultLayout'
-import type { TranslationResponse } from '../api/translation'
 
 interface Props {
   something?: string
@@ -25,7 +24,7 @@ class Translation extends React.Component<Props, State> {
     const { sourceText } = this.state
 
     try {
-      const response = await axios.get<TranslationResponse>(
+      const response = await axios.get<{ translation: string }>(
         '/api/translation',
         {
           params: { sourceText },
