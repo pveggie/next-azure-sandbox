@@ -1,22 +1,73 @@
 // https://docs.microsoft.com/en-us/azure/cognitive-services/translator/reference/v3-0-translate
 
 import type { Context, HttpRequest } from '@azure/functions'
-// import axios, { AxiosRequestConfig } from 'axios'
-// import { uuid } from 'uuidv4'
+import axios, { AxiosRequestConfig } from 'axios'
+import { uuid } from 'uuidv4'
 
 interface TranslationResponse {
   translation: string
 }
 
+const languageCodes = {
+  english: 'en',
+  korean: 'ko',
+}
+
+function getAxiosRequestConfig(
+  sourceText: string,
+  apiKey: string
+): AxiosRequestConfig {
+  return {
+    baseURL: 'https://api.cognitive.microsofttranslator.com',
+    url: '/translate',
+    method: 'post',
+    headers: {
+      'Ocp-Apim-Subscription-Key': apiKey,
+      'Ocp-Apim-Subscription-Region': 'germanywestcentral',
+      'Content-Type': 'application/json',
+      'X-ClientTraceId': uuid().toString(),
+    },
+    params: {
+      'api-version': '3.0',
+      from: languageCodes.korean,
+      fromScript: languageCodes.korean,
+      to: languageCodes.english,
+      toScript: languageCodes.english,
+    },
+    data: [
+      {
+        text: sourceText,
+      },
+    ],
+  }
+}
+
 async function httpTrigger(context: Context, req: HttpRequest): Promise<void> {
   context.log('HTTP trigger function processed a request.')
+  let status = 200
 
-  const { sourceText } = req.query
-
-  if (sourceText) {
+  try {
+    const { sourceText } = req.query
+    context.log('Source text: ', sourceText)
+    context.log('PROCESS ENV')
+    context.log(process.env)
+    const apiKey = process.env.TRANSLATION_API_KEY
+    if (!apiKey) {
+      status = 500
+      throw new Error(
+        'Api key missing from environment. Please check environment variables'
+      )
+    } else if (!sourceText) {
+      status = 400
+      throw new Error('No source text to be translated')
+    }
+    const axiosRequestConfig = getAxiosRequestConfig(sourceText, apiKey)
     await new Promise<void>((resolve) => {
       resolve()
     })
+
+    context.log('Axios Request Config:')
+    context.log(axiosRequestConfig)
 
     const responseBody: TranslationResponse = {
       translation: `Translation was requested for ${sourceText}`,
@@ -25,78 +76,14 @@ async function httpTrigger(context: Context, req: HttpRequest): Promise<void> {
     context.res = {
       body: responseBody,
     }
+  } catch (error) {
+    const err = error as Error
+    const body = err && 'message' in err ? err.message : 'An error occurred'
+    context.res = {
+      status,
+      body,
+    }
   }
 }
 
 export default httpTrigger
-
-// export default function handler(
-//   req: NextApiRequest,
-//   res: NextApiResponse<{ translation: string }>
-// ): void {
-//   const languageCodes = {
-//     english: 'en',
-//     korean: 'ko',
-//   }
-
-//   interface GetParamsArgs {
-//     apiKey: string
-//     sourceText: string
-//   }
-
-//   // function getAxiosParams({
-//   //   apiKey,
-//   //   sourceText,
-//   // }: GetParamsArgs): AxiosRequestConfig {
-//   //   return {
-//   //     baseURL: 'https://api.cognitive.microsofttranslator.com',
-//   //     url: '/translate',
-//   //     method: 'post',
-//   //     headers: {
-//   //       'Ocp-Apim-Subscription-Key': apiKey,
-//   //       'Ocp-Apim-Subscription-Region': 'germanywestcentral',
-//   //       'Content-Type': 'application/json',
-//   //       'X-ClientTraceId': uuid().toString(),
-//   //     },
-//   //     params: {
-//   //       'api-version': '3.0',
-//   //       from: languageCodes.korean,
-//   //       fromScript: languageCodes.korean,
-//   //       to: languageCodes.english,
-//   //       toScript: languageCodes.english,
-//   //     },
-//   //     data: [
-//   //       {
-//   //         text: sourceText,
-//   //       },
-//   //     ],
-//   //   }
-//   // }
-
-//   try {
-//     if (!process.env.TRANSLATION_API_KEY) {
-//       // eslint-disable-next-line no-console
-//       console.error(
-//         `Error: Environment variable TRANSLATION_API_KEY is missing from process.env.`
-//       )
-//       throw new Error()
-//     }
-//
-//     // const translationApiKey = process.env.TRANSLATION_API_KEY
-//     // const axiosParams = getAxiosParams({
-//     //   apiKey: translationApiKey,
-//     //   sourceText,
-//     // })
-//     // const azureRes = await axios(axiosParams)
-//     // console.log('SUCCESS')
-//     // console.log(azureRes)
-//     res.status(200).json({ translation: 'Test sending response from api' })
-//   } catch (error) {
-//     console.log('ERROR')
-//     console.log(Object.keys(error))
-//     // console.error(error)
-//     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-//     console.log(error.response)
-//     throw new Error()
-//   }
-// }
