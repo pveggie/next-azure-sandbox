@@ -14,7 +14,7 @@ class Translation extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      sourceText: '도 토 리 전 분',
+      sourceText: '도토리전분',
       translatedText: '',
       error: '',
     }
