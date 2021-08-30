@@ -1,7 +1,7 @@
 // https://docs.microsoft.com/en-us/azure/cognitive-services/translator/reference/v3-0-translate
 
 import type { Context, HttpRequest } from '@azure/functions'
-import axios, { AxiosRequestConfig } from 'axios'
+import axios, { AxiosError, AxiosRequestConfig } from 'axios'
 import { uuid } from 'uuidv4'
 
 interface TranslationResponse {
@@ -43,14 +43,12 @@ function getAxiosRequestConfig(
 }
 
 async function httpTrigger(context: Context, req: HttpRequest): Promise<void> {
-  context.log('HTTP trigger function processed a request.')
+  context.log('HTTP trigger function for GET /translation')
   let status = 200
 
   try {
     const { sourceText } = req.query
     context.log('Source text: ', sourceText)
-    context.log('PROCESS ENV')
-    context.log(process.env)
     const apiKey = process.env.TRANSLATION_API_KEY
     if (!apiKey) {
       status = 500
@@ -61,13 +59,11 @@ async function httpTrigger(context: Context, req: HttpRequest): Promise<void> {
       status = 400
       throw new Error('No source text to be translated')
     }
+    context.log(`Translation requested from ${sourceText}`)
     const axiosRequestConfig = getAxiosRequestConfig(sourceText, apiKey)
-    await new Promise<void>((resolve) => {
-      resolve()
-    })
+    const result = await axios(axiosRequestConfig)
 
-    context.log('Axios Request Config:')
-    context.log(axiosRequestConfig)
+    context.log(result)
 
     const responseBody: TranslationResponse = {
       translation: `Translation was requested for ${sourceText}`,
@@ -77,8 +73,29 @@ async function httpTrigger(context: Context, req: HttpRequest): Promise<void> {
       body: responseBody,
     }
   } catch (error) {
-    const err = error as Error
-    const body = err && 'message' in err ? err.message : 'An error occurred'
+    let err
+    let body = 'An error occurred'
+    if ('response' in error) {
+      err = error as AxiosError<{
+        response: { data: { error: { code: string; message: string } } }
+      }>
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const { code = '', message = '' } = err.response.data.error as {
+        code: string
+        message: string
+      }
+      context.log('Axios request to Azure Translator returned an error: ')
+      context.log(`Code: ${code}`)
+      context.log(`Message: ${message}`)
+      status = 500
+    } else {
+      err = error as Error
+      context.log('Function error occurred: ')
+      context.log(err)
+      if ('message' in error) {
+        body = err.message
+      }
+    }
     context.res = {
       status,
       body,
