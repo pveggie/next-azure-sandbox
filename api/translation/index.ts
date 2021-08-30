@@ -1,7 +1,8 @@
 // https://docs.microsoft.com/en-us/azure/cognitive-services/translator/reference/v3-0-translate
 
 import type { Context, HttpRequest } from '@azure/functions'
-import axios, { AxiosError, AxiosRequestConfig } from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
+import type { AxiosError } from 'axios'
 import { uuid } from 'uuidv4'
 
 interface TranslationResponse {
@@ -9,9 +10,7 @@ interface TranslationResponse {
 }
 
 interface AxiosErrorResponse {
-  response: {
-    data: { error: { code: string; message: string } }
-  }
+  data: { error: { code: string; message: string } }
 }
 
 const languageCodes = {
@@ -85,14 +84,16 @@ async function httpTrigger(context: Context, req: HttpRequest): Promise<void> {
       context.log('An unknown error occurred')
       status = 500
     } else if ('response' in error) {
-      // err = error
-      // const { response } = err as AxiosError<AxiosErrorResponse>
-      // const { code = '', message = '' } = response.data.error
+      err = error as AxiosError<AxiosErrorResponse>
+      const { response } = err
 
-      // if (code && message) {
-      //   context.log(`Code: ${code}`)
-      //   context.log(`Message: ${message}`)
-      // }
+      const { code = '', message = '' } = response.data.error as {
+        code: string
+        message: string
+      }
+
+      context.log(`Code: ${code}`)
+      context.log(`Message: ${message}`)
 
       context.log('Axios request to Azure Translator returned an error: ')
       status = 500
