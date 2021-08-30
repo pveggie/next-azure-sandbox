@@ -8,6 +8,12 @@ interface TranslationResponse {
   translation: string
 }
 
+interface AxiosErrorResponse {
+  response: {
+    data: { error: { code: string; message: string } }
+  }
+}
+
 const languageCodes = {
   english: 'en',
   korean: 'ko',
@@ -75,18 +81,23 @@ async function httpTrigger(context: Context, req: HttpRequest): Promise<void> {
   } catch (error) {
     let err
     let body = 'An error occurred'
-    if ('response' in error) {
-      err = error as AxiosError<{
-        response: { data: { error: { code: string; message: string } } }
-      }>
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const { code = '', message = '' } = err.response.data.error as {
-        code: string
-        message: string
-      }
+    if (!error) {
+      context.log('An unknown error occurred')
+      status = 500
+    } else if ('response' in error) {
+      // err = error
+      // const { response } = err as AxiosError<AxiosErrorResponse>
+      // const { code = '', message = '' } = response.data.error
+
+      // if (code && message) {
+      //   context.log(`Code: ${code}`)
+      //   context.log(`Message: ${message}`)
+      // }
+
       context.log('Axios request to Azure Translator returned an error: ')
-      context.log(`Code: ${code}`)
-      context.log(`Message: ${message}`)
+      status = 500
+    } else if ('request' in error) {
+      context.log('Axios request to Azure Translator returned no response')
       status = 500
     } else {
       err = error as Error
