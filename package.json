@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "functions": "func host start --script-root api",
+    "api": "func host start --script-root api",
     "swa": "swa start http://localhost:3000 --api ./api",
     "build": "next build && next export",
     "start": "next start",
