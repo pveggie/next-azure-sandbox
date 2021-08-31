@@ -19,7 +19,7 @@ npm run api
 1. In a third terminal window, serve the static web app, which uses both the app and api together
 
 ```bash
-npm run saw
+npm run swa
 ```
 
 Open the address given by the swa to view the app. This should be [http://localhost:4280](http://localhost:4280).
