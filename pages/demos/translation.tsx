@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react'
 import axios, { AxiosError } from 'axios'
 import { debounce } from 'ts-debounce'
 import DefaultLayout from '../../components/layouts/DefaultLayout'
+import Loader from '../../components/atoms/Loader'
 
 interface Props {
   something?: string
@@ -10,6 +11,7 @@ interface State {
   sourceText: string
   translatedText: string
   error: string
+  isTranslating: boolean
 }
 class Translation extends React.Component<Props, State> {
   placeholderText =
@@ -27,6 +29,7 @@ class Translation extends React.Component<Props, State> {
       sourceText: '',
       translatedText: '',
       error: '',
+      isTranslating: false,
     }
   }
 
@@ -47,6 +50,7 @@ class Translation extends React.Component<Props, State> {
   }
 
   async translateText(sourceText: string): Promise<void> {
+    this.setState({ isTranslating: true })
     try {
       const response = await axios.get<{ translation: string }>(
         '/api/translation',
@@ -65,11 +69,13 @@ class Translation extends React.Component<Props, State> {
 
       this.setState({ error: errMessage })
     }
+
+    this.setState({ isTranslating: false })
   }
 
   render(): ReactNode {
     const { placeholderText } = this
-    const { sourceText, translatedText, error } = this.state
+    const { sourceText, translatedText, error, isTranslating } = this.state
     return (
       <DefaultLayout
         pageTitle="Translation"
@@ -106,6 +112,7 @@ class Translation extends React.Component<Props, State> {
             <div className="md:h-full">
               <h3 className="mb-2 font-bold">Result</h3>
               <div className="p-2 border border-gray-400 md:h-full">
+                <Loader isMask isLoading={isTranslating} iconClassName="mr-3" />
                 {error && <p className="mb-2 text-red-600">{error}</p>}
                 <p className="mb-0">{translatedText}</p>
               </div>
