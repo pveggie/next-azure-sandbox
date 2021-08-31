@@ -14,6 +14,12 @@ interface State {
 class Translation extends React.Component<Props, State> {
   placeholderText = '도토리전분'
 
+  debouncedTranslation = debounce(async (sourceText) => {
+    if (sourceText) {
+      await this.translateText(sourceText)
+    }
+  }, 1500)
+
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -39,14 +45,7 @@ class Translation extends React.Component<Props, State> {
     await this.debouncedTranslation(sourceText)
   }
 
-  debouncedTranslation = debounce(async (sourceText) => {
-    if (sourceText) {
-      this.translateText(sourceText)
-    }
-  }, 1000)
-
   async translateText(sourceText: string): Promise<void> {
-    console.log('translating')
     try {
       const response = await axios.get<{ translation: string }>(
         '/api/translation',
