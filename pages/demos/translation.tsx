@@ -12,7 +12,8 @@ interface State {
   error: string
 }
 class Translation extends React.Component<Props, State> {
-  placeholderText = '도토리전분'
+  placeholderText =
+    '고주장, 물엿, 설탕, 정제수, 양파, 발효식초, 마늘, 기타과당, 고춧가루, 포도당, 정제소금, 대파, 야채오일베이스'
 
   debouncedTranslation = debounce(async (sourceText) => {
     if (sourceText) {
@@ -36,9 +37,9 @@ class Translation extends React.Component<Props, State> {
   }
 
   async handleSourceTextChange(
-    event: React.FormEvent<HTMLInputElement>
+    event: React.FormEvent<HTMLTextAreaElement>
   ): Promise<void> {
-    const target = event.target as HTMLInputElement
+    const target = event.target as HTMLTextAreaElement
     const sourceText = target.value
     this.setState({ sourceText, translatedText: '' })
 
@@ -70,19 +71,47 @@ class Translation extends React.Component<Props, State> {
     const { placeholderText } = this
     const { sourceText, translatedText, error } = this.state
     return (
-      <DefaultLayout pageTitle="Translation">
-        <input
-          type="text"
-          placeholder={placeholderText}
-          value={sourceText}
-          onChange={(event) => this.handleSourceTextChange(event)}
-        />
+      <DefaultLayout
+        pageTitle="Translation"
+        intro="Translating text using an Azure Cognitive Services Translator"
+      >
+        <section className="content">
+          <p>
+            This page allows translation of text from Korean to English using
+            the{' '}
+            <a
+              href="https://docs.microsoft.com/en-us/azure/cognitive-services/translator/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Translator API of Azure Cognitive Services
+            </a>
+            .{' '}
+          </p>
+        </section>
 
-        <div className="p-4">
-          <h3 className="mb-2 font-bold">Result</h3>
-          {error && <p className="text-red-600">{error}</p>}
-          <p>{translatedText}</p>
-        </div>
+        <section>
+          <div className="grid gap-x-8 gap-y-4 md:grid-cols-2">
+            <div className="md:h-full">
+              <h3 className="mb-2 font-bold">Source Text</h3>
+              <textarea
+                placeholder={placeholderText}
+                value={sourceText}
+                onChange={(event) => this.handleSourceTextChange(event)}
+                rows={5}
+                className="w-full border-gray-400 md:h-full"
+              />
+            </div>
+
+            <div className="md:h-full">
+              <h3 className="mb-2 font-bold">Result</h3>
+              <div className="p-2 border border-gray-400 md:h-full">
+                {error && <p className="mb-2 text-red-600">{error}</p>}
+                <p className="mb-0">{translatedText}</p>
+              </div>
+            </div>
+          </div>
+        </section>
       </DefaultLayout>
     )
   }
