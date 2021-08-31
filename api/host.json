@@ -1,6 +1,9 @@
 {
   "version": "2.0",
   "logging": {
+    "console": {
+      "isEnabled": true
+    },
     "applicationInsights": {
       "samplingSettings": {
         "isEnabled": true,
@@ -11,5 +14,6 @@
   "extensionBundle": {
     "id": "Microsoft.Azure.Functions.ExtensionBundle",
     "version": "[2.*, 3.0.0)"
-  }
+  },
+  "watchDirectories": ["translation"]
 }

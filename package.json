@@ -4,13 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "functions": "func host start --script-root api",
+    "swa": "swa start http://localhost:3000 --api ./api",
     "build": "next build && next export",
     "start": "next start",
     "stylelint": "npx stylelint \"**/*.css\"",
     "eslint": "next lint",
     "typecheck": "npx tsc --noEmit && cd api && npx tsc --noEmit && cd ..",
-    "lint": "npm run stylelint && npm run eslint && npm run typecheck",
-    "dev-functions": "npm run build && cd api && npm run build && cd .. && swap start out --api api"
+    "lint": "npm run stylelint && npm run eslint && npm run typecheck"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
@@ -29,6 +30,7 @@
     "react-cropper": "^2.1.8",
     "react-dom": "16.13.1",
     "tesseract.js": "^2.1.5",
+    "ts-debounce": "^3.0.0",
     "uuidv4": "^6.2.12"
   },
   "devDependencies": {
