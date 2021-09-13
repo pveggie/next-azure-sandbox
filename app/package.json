@@ -1,0 +1,45 @@
+{
+  "name": "next-azure-sandbox-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && next export",
+    "start": "next start",
+    "stylelint": "npx stylelint \"**/*.css\"",
+    "eslint": "next lint",
+    "typecheck": "npx tsc --noEmit",
+    "lint": "npm run stylelint && npm run eslint && npm run typecheck"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-brands-svg-icons": "^5.15.4",
+    "@fortawesome/free-regular-svg-icons": "^5.15.4",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.15",
+    "@tailwindcss/aspect-ratio": "^0.2.1",
+    "@tailwindcss/forms": "^0.3.3",
+    "axios": "^0.21.1",
+    "classnames": "^2.3.1",
+    "cropperjs": "^1.5.12",
+    "next": "^11.1.0",
+    "react": "^17.0.2",
+    "react-cropper": "^2.1.8",
+    "react-dom": "16.13.1",
+    "tesseract.js": "^2.1.5",
+    "ts-debounce": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.19",
+    "@types/react-dom": "^17.0.9",
+    "autoprefixer": "^10.3.1",
+    "postcss": "^8.3.6",
+    "prettier-plugin-tailwind": "^2.2.12",
+    "serve": "^11.3.2",
+    "stylelint": "^13.13.1",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-property-sort-order-smacss": "^7.1.0",
+    "stylelint-config-standard": "^22.0.0",
+    "tailwindcss": "^2.2.7"
+  }
+}
