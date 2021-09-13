@@ -3,5 +3,5 @@ const tailwind = require('prettier-plugin-tailwind')
 
 module.exports = {
   ...baseConfig,
-  plugins: [tailwind]
+  plugins: [tailwind],
 }

@@ -12,7 +12,7 @@
     "lint-api": "npm run lint --prefix api",
     "lint-root": "eslint './*.js'",
     "prettier": "prettier '**/*.{js,jsx,vue}' --check",
-    "lint": "npm run lint-root && npm run lint-app && npm run lint-api"
+    "lint": "npm run lint-root && npm run lint-app && npm run lint-api && npm run prettier"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.29.2",
