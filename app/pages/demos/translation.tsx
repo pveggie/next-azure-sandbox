@@ -62,7 +62,7 @@ class Translation extends React.Component<Props, State> {
       this.setState({ translatedText })
     } catch (error) {
       let errMessage = 'An error occurred.'
-      if ('statusCode' in error) {
+      if (error instanceof Error && 'statusCode' in error) {
         const respError = error as AxiosError
         errMessage = respError.message
       }
