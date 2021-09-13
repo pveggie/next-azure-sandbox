@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   extends: ['airbnb-typescript', 'next/core-web-vitals', '../.eslintrc.js'],
   rules: {
     'react/jsx-props-no-spreading': [

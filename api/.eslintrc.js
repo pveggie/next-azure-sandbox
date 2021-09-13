@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   extends: ['airbnb-typescript', '../.eslintrc.js'],
   ignorePatterns: ['dist/'],
   parser: '@typescript-eslint/parser',
