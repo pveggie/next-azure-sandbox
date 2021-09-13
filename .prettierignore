@@ -1,15 +1,15 @@
 # https://prettier.io/docs/en/ignore.html#yaml
 # dependencies
-/node_modules
-/.pnp
+node_modules
+.pnp
 .pnp.js
 
 # testing
-/coverage
+coverage
 
 # next.js
-/.next/
-/out/
+.next/
+out/
 
 # misc
 .DS_Store

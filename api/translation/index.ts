@@ -1,5 +1,4 @@
 // https://docs.microsoft.com/en-us/azure/cognitive-services/translator/reference/v3-0-translate
-
 import type { Context, HttpRequest } from '@azure/functions'
 import axios from 'axios'
 import type { AxiosError, AxiosResponse, AxiosRequestConfig } from 'axios'
